@@ -48,14 +48,12 @@ function loadEventById(id) {
             loading.hide();
             loadingHidden.show();
         }
-        popup('Error', error.message);
+        popup('danger', 'Error!', error.message);
     });
 }
 
-function popup(title, message) {
-    $('#adv-popup-title').text(title);
-    $('#adv-popup-message').text(message);
-    $('#adv-popup').modal('show');
+function popup(type, title, message) {
+    $('#adv-alert-div').append('<div class="alert alert-' + type + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times</span><span class="sr-only">Close</span></button> <strong>' + title + '</strong> ' + message + '</div>');
 }
 
 $(document).ready(function () {
@@ -66,6 +64,12 @@ $(document).ready(function () {
             loadEventById(lastEvent);
         }
     });
+
+    $('#adv-login-button').click(function (e) {
+
+    });
+
+    $('#adv-event-loading-hidden, .adv-login').hide();
 
     loadEventById(0);
 });

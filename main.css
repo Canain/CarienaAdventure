@@ -1,15 +1,7 @@
-body {
+#adv-main {
     text-align: center;
 }
 
 h3 {
     margin-top: 5px;
-}
-
-#adv-event-loading {
-    display: block;
-}
-
-#adv-event-loading-hidden {
-    display: none;
 }

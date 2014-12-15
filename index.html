@@ -11,27 +11,42 @@
     <title>Cariena Adventure</title>
 </head>
 <body>
-<h1>Cariena Adventure</h1>
-<p id="adv-event-loading">Loading&hellip;</p>
-<div id="adv-event-loading-hidden">
-    <h3 id="adv-event-scenario"></h3>
-    <h4 id="adv-event-whatdo">What do you do?</h4>
-    <div id="adv-event-options" class="list-group"></div>
+<div class="container">
+<div id="adv-main">
+    <h1>Cariena Adventure</h1>
+    <div id="adv-alert-div"></div>
+    <p id="adv-event-loading">Loading&hellip;</p>
+    <div id="adv-event-loading-hidden">
+        <h3 id="adv-event-scenario"></h3>
+        <h4 id="adv-event-whatdo">What do you do?</h4>
+        <div id="adv-event-options" class="list-group"></div>
+    </div>
+    <button id="adv-back" class="btn btn-default">Back</button>
+    <button id="adv-login-button" class="btn btn-default adv-logout" data-toggle="modal" data-target="#adv-popup-login">Login to Contribute</button>
+    <button id="adv-login-logout" class="btn btn-default adv-login">Logout</button>
 </div>
-<button id="adv-back" class="btn btn-default">Back</button>
-<button id="adv-login-button" class="btn btn-default adv-logout">Login to Contribute</button>
-<div id="adv-popup" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+</div>
+<div class="modal fade" id="adv-popup-login" tabindex="-1" role="dialog" aria-labelledby="adv-popup-login-title" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 id="adv-popup-title" class="modal-title"></h4>
+                <h4 class="modal-title" id="adv-popup-login-title">Login</h4>
             </div>
             <div class="modal-body">
-                <p id="adv-popup-message"></p>
+                <div class="form-group">
+                    <label for="adv-popup-login-email" class="sr-only">Email address</label>
+                    <input type="email" id="adv-popup-login-email" class="form-control" placeholder="Email address" required="" autofocus="">
+                </div>
+                <div class="form-group">
+                    <label for="adv-popup-login-pass" class="sr-only">Password</label>
+                    <input type="password" id="adv-popup-login-pass" class="form-control" placeholder="Password" required="">
+                </div>
+                </ul>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="adv-popup-login-submit" type="button" class="btn btn-primary">Login</button>
             </div>
         </div>
     </div>
