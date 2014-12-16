@@ -77,11 +77,11 @@ $(document).ready(function () {
         }
     });
 
-    $('#adv-refresh').click(function (e) {
+    $('#adv-refresh').click(function(e) {
         loadEventById(currentEvent);
     });
 
-    $('#adv-popup-login-register').click(function (e) {
+    $('#adv-popup-login-register').click(function(e) {
         fb.createUser({
             'email' : $('#adv-popup-login-email').val(),
             'password' : $('#adv-popup-login-pass').val()
@@ -95,7 +95,7 @@ $(document).ready(function () {
         });
     });
 
-    $('#adv-popup-login-submit').click(function (e) {
+    $('#adv-popup-login-submit').click(function(e) {
         fb.authWithPassword({
             'email' : $('#adv-popup-login-email').val(),
             'password' : $('#adv-popup-login-pass').val()
@@ -111,16 +111,38 @@ $(document).ready(function () {
         });
     });
 
-    $('#adv-login-logout').click(function (e) {
+    $('#adv-login-logout').click(function(e) {
         fb.unauth();
         balert('warning', 'Logged out!', 'You have successfully logged out');
         $('.adv-login').hide();
         $('.adv-logout').show();
     });
 
+    $('#adv-popup-login').on('shown.bs.modal', function() {
+        $('#adv-popup-login-email').focus();
+    });
+
+    $('#adv-popup-login-email').on("keypress", function(e) {
+        if (e.keyCode == 13) {
+            $('#adv-popup-login-pass').focus();
+            return false;
+        }
+    });
+
     $('#adv-popup-login-pass').on("keypress", function(e) {
         if (e.keyCode == 13) {
             $('#adv-popup-login-submit').click();
+            return false;
+        }
+    });
+
+    $('#adv-popup-add').on('shown.bs.modal', function() {
+        $('#adv-popup-add-option').focus();
+    });
+
+    $('#adv-popup-add-option').on("keypress", function(e) {
+        if (e.keyCode == 13) {
+            $('#adv-popup-add-scenario').focus();
             return false;
         }
     });
@@ -132,7 +154,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#adv-popup-add-submit').click(function (e) {
+    $('#adv-popup-add-submit').click(function(e) {
         var option = $('#adv-popup-add-option').val().trim();
         var scenario = $('#adv-popup-add-scenario').val().trim();
         if (option == '') {
@@ -170,6 +192,11 @@ $(document).ready(function () {
     $(window).on('hashchange', onChangeHash);
 
     $('#adv-event-loading-hidden, .adv-login').hide();
+
+    if (fb.getAuth()) {
+        $('.adv-logout').hide();
+        $('.adv-login').show();
+    }
 
     onChangeHash();
 });
