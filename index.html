@@ -22,9 +22,35 @@
         <div id="adv-event-options" class="list-group"></div>
     </div>
     <button id="adv-back" class="btn btn-default">Back</button>
+    <button id="adv-event-add" class="btn btn-default adv-login" data-toggle="modal" data-target="#adv-popup-add">Add</button>
     <button id="adv-login-button" class="btn btn-default adv-logout" data-toggle="modal" data-target="#adv-popup-login">Login to Contribute</button>
     <button id="adv-login-logout" class="btn btn-default adv-login">Logout</button>
 </div>
+</div>
+<div class="modal fade" id="adv-popup-add" tabindex="-1" role="dialog" aria-labelledby="adv-popup-add-title" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="adv-popup-add-title">Add an Option</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="adv-popup-add-option" class="sr-only">Option</label>
+                    <input type="text" id="adv-popup-add-option" class="form-control" placeholder="Option" required="true" autofocus="">
+                </div>
+                <div class="form-group">
+                    <label for="adv-popup-add-scenario" class="sr-only">Scenario</label>
+                    <input type="text" id="adv-popup-add-scenario" class="form-control" placeholder="Scenario" required="true">
+                </div>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="adv-popup-add-submit" type="button" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="modal fade" id="adv-popup-login" tabindex="-1" role="dialog" aria-labelledby="adv-popup-login-title" aria-hidden="true">
     <div class="modal-dialog">
@@ -36,16 +62,17 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="adv-popup-login-email" class="sr-only">Email address</label>
-                    <input type="email" id="adv-popup-login-email" class="form-control" placeholder="Email address" required="" autofocus="">
+                    <input type="email" id="adv-popup-login-email" class="form-control" placeholder="Email address" required="true" autofocus="">
                 </div>
                 <div class="form-group">
                     <label for="adv-popup-login-pass" class="sr-only">Password</label>
-                    <input type="password" id="adv-popup-login-pass" class="form-control" placeholder="Password" required="">
+                    <input type="password" id="adv-popup-login-pass" class="form-control" placeholder="Password" required="true">
                 </div>
                 </ul>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="adv-popup-login-register" type="button" class="btn btn-default">Register</button>
                 <button id="adv-popup-login-submit" type="button" class="btn btn-primary">Login</button>
             </div>
         </div>

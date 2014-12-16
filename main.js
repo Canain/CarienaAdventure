@@ -9,9 +9,11 @@ function loadEvent(event, id) {
     var optionsDiv = $('#adv-event-options');
     optionsDiv.empty();
     if (options) {
-        for (var i = 0; i < options.length; i++) {
-            var option = options[i];
-            optionsDiv.append('<a href="#" data-eventid="' + option['eventid'] + '" class="list-group-item adv-event-option">' + option['option'] + '</a>');
+        for (var key in options) {
+            var option = options[key];
+            if (!option['deleted']) {
+                optionsDiv.append('<a href="#" data-eventid="' + option['eventid'] + '" class="list-group-item adv-event-option">' + option['option'] + '</a>');
+            }
         }
     }
 
@@ -48,12 +50,12 @@ function loadEventById(id) {
             loading.hide();
             loadingHidden.show();
         }
-        popup('danger', 'Error!', error.message);
+        balert('danger', 'Error!', error.message);
     });
 }
 
-function popup(type, title, message) {
-    $('#adv-alert-div').append('<div class="alert alert-' + type + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times</span><span class="sr-only">Close</span></button> <strong>' + title + '</strong> ' + message + '</div>');
+function balert(type, title, message) {
+    $('#adv-alert-div').prepend('<div class="alert alert-' + type + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times</span><span class="sr-only">Close</span></button> <strong>' + title + '</strong>' + (message ? ' ' + message : '') + '</div>');
 }
 
 $(document).ready(function () {
@@ -65,8 +67,90 @@ $(document).ready(function () {
         }
     });
 
-    $('#adv-login-button').click(function (e) {
+    $('#adv-popup-login-register').click(function (e) {
+        fb.createUser({
+            'email' : $('#adv-popup-login-email').val(),
+            'password' : $('#adv-popup-login-pass').val()
+        }, function(error) {
+            if (error) {
+                balert('danger', 'Error!', error.message);
+            } else {
+                balert('success', 'Registration success!', 'Login to continue');
+            }
+            $('#adv-popup-login').modal('hide');
+        });
+    });
 
+    $('#adv-popup-login-submit').click(function (e) {
+        fb.authWithPassword({
+            'email' : $('#adv-popup-login-email').val(),
+            'password' : $('#adv-popup-login-pass').val()
+        }, function(error, authData) {
+            if (error) {
+                balert('danger', 'Error!', error.message);
+            } else {
+                balert('success', 'Login success!');
+                $('.adv-logout').hide();
+                $('.adv-login').show();
+            }
+            $('#adv-popup-login').modal('hide');
+        });
+    });
+
+    $('#adv-login-logout').click(function (e) {
+        fb.unauth();
+        balert('warning', 'Logged out!', 'You have successfully logged out');
+        $('.adv-login').hide();
+        $('.adv-logout').show();
+    });
+
+    $('#adv-popup-login-pass').on("keypress", function(e) {
+        if (e.keyCode == 13) {
+            $('#adv-popup-login-submit').click();
+            return false;
+        }
+    });
+
+    $('#adv-popup-add-scenario').on("keypress", function(e) {
+        if (e.keyCode == 13) {
+            $('#adv-popup-add-submit').click();
+            return false;
+        }
+    });
+
+    $('#adv-popup-add-submit').click(function (e) {
+        var option = $('#adv-popup-add-option').val().trim();
+        var scenario = $('#adv-popup-add-scenario').val().trim();
+        if (option == '') {
+
+        } else if (scenario == '') {
+
+        } else {
+            var ref = fb.child('events').push({
+                'ownerid': fb.getAuth().uid,
+                'scenario': scenario
+            }, function (error) {
+                if (error) {
+                    balert('danger', 'Error!', error.message);
+                    $('#adv-popup-add').modal('hide');
+                } else {
+                    fb.child('events/' + currentEvent + '/options').push({
+                        'ownerid': fb.getAuth().uid,
+                        'option': option,
+                        'eventid': ref.key(),
+                        'deleted': false
+                    }, function (error) {
+                        if (error) {
+                            balert('danger', 'Error!', error.message);
+                        } else {
+                            balert('success', 'Success!', 'The scenario has been added');
+                            loadEventById(currentEvent);
+                        }
+                        $('#adv-popup-add').modal('hide');
+                    });
+                }
+            });
+        }
     });
 
     $('#adv-event-loading-hidden, .adv-login').hide();

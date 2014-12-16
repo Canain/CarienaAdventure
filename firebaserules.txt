@@ -1,0 +1,25 @@
+{
+  "rules": {
+    "events": {
+      ".read": true,
+      "$events": {
+        ".write": "auth != null && !data.exists()",
+        "scenario": {
+          ".write": "auth != null && auth.uid == newData.child('ownerid').val()"
+        },
+        "options": {
+          ".write": "auth != null && !data.exists()",
+          "$options": {
+            ".write": "auth != null && !data.exists()",
+            "deleted": {
+              ".write": "auth != null && auth.uid == newData.child('ownerid').val()"
+            },
+            "option": {
+              ".write": "auth != null && auth.uid == newData.child('ownerid').val()"
+            }
+          }
+        }
+      }
+    }
+  }
+}
