@@ -3,6 +3,18 @@ var fb = null;
 var lastEvent = -1;
 var currentEvent = -1;
 
+function htmlEncode(value) {
+    return $('<div>').text(value).html();
+}
+
+function htmlDecode(value) {
+    return $('<div>').html(value).text();
+}
+
+function balert(type, title, message) {
+    $('#adv-alert-div').prepend('<div class="alert alert-' + type + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times</span><span class="sr-only">Close</span></button> <strong>' + title + '</strong>' + (message ? ' ' + message : '') + '</div>');
+}
+
 function loadEvent(event, id) {
     $('#adv-event-scenario').text(event['scenario']);
     var options = event['options'];
@@ -12,19 +24,15 @@ function loadEvent(event, id) {
         for (var key in options) {
             var option = options[key];
             if (!option['deleted']) {
-                optionsDiv.append('<a href="#" data-eventid="' + option['eventid'] + '" class="list-group-item adv-event-option">' + option['option'] + '</a>');
+                optionsDiv.append('<a href="#' + encodeURIComponent(option['eventid']) + '" class="list-group-item adv-event-option">' + htmlEncode(option['option']) + '</a>');
             }
         }
     }
 
-    lastEvent = currentEvent;
-    currentEvent = id;
-
-    $('.adv-event-option').click(function (e) {
-        var target = $(e.target);
-        loadEventById(target.data('eventid'));
-        e.preventDefault();
-    });
+    if (currentEvent != id) {
+        lastEvent = currentEvent;
+        currentEvent = id;
+    }
 }
 
 function loadEventById(id) {
@@ -54,8 +62,9 @@ function loadEventById(id) {
     });
 }
 
-function balert(type, title, message) {
-    $('#adv-alert-div').prepend('<div class="alert alert-' + type + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times</span><span class="sr-only">Close</span></button> <strong>' + title + '</strong>' + (message ? ' ' + message : '') + '</div>');
+function onChangeHash() {
+    var id = location.hash == '' ? '0' : decodeURIComponent(location.hash.slice(1));
+    loadEventById(id);
 }
 
 $(document).ready(function () {
@@ -63,8 +72,13 @@ $(document).ready(function () {
 
     $('#adv-back').click(function (e) {
         if (lastEvent > -1) {
-            loadEventById(lastEvent);
+            var id = lastEvent;
+            window.location.hash = id == '0' ? '' : '#' + encodeURIComponent(id);
         }
+    });
+
+    $('#adv-refresh').click(function (e) {
+        loadEventById(currentEvent);
     });
 
     $('#adv-popup-login-register').click(function (e) {
@@ -153,7 +167,9 @@ $(document).ready(function () {
         }
     });
 
+    $(window).on('hashchange', onChangeHash);
+
     $('#adv-event-loading-hidden, .adv-login').hide();
 
-    loadEventById(0);
+    onChangeHash();
 });
