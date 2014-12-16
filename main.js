@@ -12,7 +12,17 @@ function htmlDecode(value) {
 }
 
 function balert(type, title, message) {
-    $('#adv-alert-div').prepend('<div class="alert alert-' + type + ' alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times</span><span class="sr-only">Close</span></button> <strong>' + title + '</strong>' + (message ? ' ' + message : '') + '</div>');
+    var alertObj = $('#adv-alert');
+    var newAlertObj = $('<div id="adv-alert" class="alert alert-' + type + ' alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times</span><span class="sr-only">Close</span></button>' + (title && title != '' ? '<strong>' + title + '</strong>' : '') + (message ? ' ' + message : '') + '</div>');
+    newAlertObj.hide();
+    if (alertObj.length) {
+        alertObj.on('closed.bs.alert', function () {
+            newAlertObj.prependTo('#adv-alert-div').show();
+        });
+        alertObj.alert('close');
+    } else {
+        newAlertObj.prependTo('#adv-alert-div').show();
+    }
 }
 
 function loadEvent(event, id) {
@@ -79,6 +89,7 @@ $(document).ready(function () {
 
     $('#adv-refresh').click(function(e) {
         loadEventById(currentEvent);
+        balert('success', 'Page refreshed!');
     });
 
     $('#adv-popup-login-register').click(function(e) {
@@ -113,7 +124,7 @@ $(document).ready(function () {
 
     $('#adv-login-logout').click(function(e) {
         fb.unauth();
-        balert('warning', 'Logged out!', 'You have successfully logged out');
+        balert('warning', '', 'You have successfully logged out');
         $('.adv-login').hide();
         $('.adv-logout').show();
     });
