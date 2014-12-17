@@ -81,10 +81,7 @@ $(document).ready(function () {
     fb = new Firebase('https://cariena.firebaseio.com');
 
     $('#adv-back').click(function (e) {
-        if (lastEvent > -1) {
-            var id = lastEvent;
-            window.location.hash = id == '0' ? '' : '#' + encodeURIComponent(id);
-        }
+        history.go(-1);
     });
 
     $('#adv-refresh').click(function(e) {
