@@ -5,16 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.0.0/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.0.0/js/bootstrap-toggle.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.0.6/firebase.js"></script>
     <script src="main.js"></script>
     <title>Cariena Adventure</title>
 </head>
 <body>
-<div class="container">
-<div id="adv-main">
+<div id="adv-main" class="container">
     <h1>Cariena Adventure</h1>
     <div id="adv-alert-div"></div>
     <p id="adv-event-loading">Loading&hellip;</p>
@@ -23,37 +24,24 @@
         <h4 id="adv-event-whatdo">What do you do?</h4>
         <div id="adv-event-options" class="list-group"></div>
     </div>
-    <button id="adv-back" class="btn btn-default">Back</button>
-    <button id="adv-refresh" class="btn btn-default">Refresh</button>
-    <button id="adv-event-add" class="btn btn-default adv-login" data-toggle="modal" data-target="#adv-popup-add">Add</button>
+    <form id="adv-edit-add" class="form-inline adv-edit" role="form">
+        <div class="form-group">
+            <label for="adv-edit-add-option" class="sr-only">Option</label>
+            <input type="text" id="adv-edit-add-option" class="form-control" placeholder="Option" required="true">
+        </div>
+        <div class="form-group">
+            <label for="adv-edit-add-scenario" class="sr-only">Scenario</label>
+            <input type="text" id="adv-edit-add-scenario" class="form-control" placeholder="Scenario" required="true">
+        </div>
+        <div class="form-group">
+            <button id="adv-edit-add-submit" type="button" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+    <button id="adv-back" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></button>
+    <button id="adv-refresh" class="btn btn-default"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+    <span class="adv-login"><input id="adv-edit-button" data-on="Edit Mode On" data-off="Edit Mode Off" type="checkbox" data-toggle="toggle"></span>
     <button id="adv-login-button" class="btn btn-default adv-logout" data-toggle="modal" data-target="#adv-popup-login">Login to Contribute</button>
     <button id="adv-login-logout" class="btn btn-default adv-login">Logout</button>
-</div>
-</div>
-<div class="modal fade" id="adv-popup-add" tabindex="-1" role="dialog" aria-labelledby="adv-popup-add-title" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4 class="modal-title" id="adv-popup-add-title">Add an Option</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="adv-popup-add-option" class="sr-only">Option</label>
-                    <input type="text" id="adv-popup-add-option" class="form-control" placeholder="Option" required="true" autofocus="">
-                </div>
-                <div class="form-group">
-                    <label for="adv-popup-add-scenario" class="sr-only">Scenario</label>
-                    <input type="text" id="adv-popup-add-scenario" class="form-control" placeholder="Scenario" required="true">
-                </div>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button id="adv-popup-add-submit" type="button" class="btn btn-primary">Add</button>
-            </div>
-        </div>
-    </div>
 </div>
 <div class="modal fade" id="adv-popup-login" tabindex="-1" role="dialog" aria-labelledby="adv-popup-login-title" aria-hidden="true">
     <div class="modal-dialog">
@@ -65,7 +53,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="adv-popup-login-email" class="sr-only">Email address</label>
-                    <input type="email" id="adv-popup-login-email" class="form-control" placeholder="Email address" required="true" autofocus="">
+                    <input type="email" id="adv-popup-login-email" class="form-control" placeholder="Email address" required="true">
                 </div>
                 <div class="form-group">
                     <label for="adv-popup-login-pass" class="sr-only">Password</label>

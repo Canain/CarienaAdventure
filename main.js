@@ -144,27 +144,32 @@ $(document).ready(function () {
         }
     });
 
-    $('#adv-popup-add').on('shown.bs.modal', function() {
-        $('#adv-popup-add-option').focus();
+    $('#adv-edit-button').change(function() {
+        if($(this).prop('checked')) {
+            $('.adv-edit').show();
+            $('#adv-edit-add-option').focus();
+        } else {
+            $('.adv-edit').hide();
+        }
     });
 
-    $('#adv-popup-add-option').on("keypress", function(e) {
+    $('#adv-edit-add-option').on("keypress", function(e) {
         if (e.keyCode == 13) {
-            $('#adv-popup-add-scenario').focus();
+            $('#adv-edit-add-scenario').focus();
             return false;
         }
     });
 
-    $('#adv-popup-add-scenario').on("keypress", function(e) {
+    $('#adv-edit-add-scenario').on("keypress", function(e) {
         if (e.keyCode == 13) {
-            $('#adv-popup-add-submit').click();
+            $('#adv-edit-add-submit').click();
             return false;
         }
     });
 
-    $('#adv-popup-add-submit').click(function(e) {
-        var option = $('#adv-popup-add-option').val().trim();
-        var scenario = $('#adv-popup-add-scenario').val().trim();
+    $('#adv-edit-add-submit').click(function(e) {
+        var option = $('#adv-edit-add-option').val().trim();
+        var scenario = $('#adv-edit-add-scenario').val().trim();
         if (option == '') {
 
         } else if (scenario == '') {
@@ -176,7 +181,8 @@ $(document).ready(function () {
             }, function (error) {
                 if (error) {
                     balert('danger', 'Error!', error.message);
-                    $('#adv-popup-add').modal('hide');
+                    $('#adv-edit-add-option').val('');
+                    $('#adv-edit-add-scenario').val('');
                 } else {
                     fb.child('events/' + currentEvent + '/options').push({
                         'ownerid': fb.getAuth().uid,
@@ -190,7 +196,8 @@ $(document).ready(function () {
                             balert('success', 'Success!', 'The scenario has been added');
                             loadEventById(currentEvent);
                         }
-                        $('#adv-popup-add').modal('hide');
+                        $('#adv-edit-add-option').val('');
+                        $('#adv-edit-add-scenario').val('');
                     });
                 }
             });
@@ -199,7 +206,7 @@ $(document).ready(function () {
 
     $(window).on('hashchange', onChangeHash);
 
-    $('#adv-event-loading-hidden, .adv-login').hide();
+    $('#adv-event-loading-hidden, .adv-login, .adv-edit').hide();
 
     if (fb.getAuth()) {
         $('.adv-logout').hide();
