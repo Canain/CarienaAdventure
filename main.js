@@ -1,7 +1,7 @@
 var fb = null;
 
-var lastEvent = -1;
-var currentEvent = -1;
+var lastEvent = '-1';
+var currentEvent = '-1';
 
 function htmlEncode(value) {
     return $('<div>').text(value).html();
@@ -31,13 +31,35 @@ function loadEvent(event, id) {
     var optionsDiv = $('#adv-event-options');
     optionsDiv.empty();
     if (options) {
+        var uid = fb.getAuth().uid;
         for (var key in options) {
             var option = options[key];
             if (!option['deleted']) {
-                optionsDiv.append('<a href="#' + encodeURIComponent(option['eventid']) + '" class="list-group-item adv-event-option">' + htmlEncode(option['option']) + '</a>');
+                var append = '<a href="#' + encodeURIComponent(option['eventid']) + '" class="list-group-item adv-event-option">';
+                if (option['ownerid'] == uid) {
+                    append += '<button type="button" class="badge adv-edit adv-edit-delete"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span><span class="sr-only">Delete</span></button><button type="button" class="badge adv-edit adv-edit-modify"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><span class="sr-only">Modify</span></button>';
+                }
+                append += htmlEncode(option['option']) + '</a>';
+                optionsDiv.append(append);
+            } else if (option['deleted'] && option['ownerid'] == uid) {
+                var append = '<a href="#' + encodeURIComponent(option['eventid']) + '" class="list-group-item adv-event-option adv-edit disabled">';
+                    append += '<button type="button" class="badge adv-edit-restore"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span><span class="sr-only">Restore</span></button><button type="button" class="badge adv-edit-modify"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span><span class="sr-only">Modify</span></button>';
+                append += htmlEncode(option['option']) + '</a>';
+                optionsDiv.append(append);
             }
         }
     }
+    if (!$('#adv-edit-button').prop('checked')) {
+        $('.adv-edit').hide();
+    }
+
+    $(".adv-event-option").click(function (e) {
+        return $(e.target).hasClass('adv-event-option');
+    });
+
+    $('.adv-edit-delete').click(function (e) {
+
+    });
 
     if (currentEvent != id) {
         lastEvent = currentEvent;
@@ -46,7 +68,7 @@ function loadEvent(event, id) {
 }
 
 function loadEventById(id) {
-    var showLoading = currentEvent == -1;
+    var showLoading = currentEvent == '-1';
     if (showLoading) {
         var loading = $('#adv-event-loading');
         var loadingHidden = $('#adv-event-loading-hidden');
@@ -184,6 +206,7 @@ $(document).ready(function () {
                     $('#adv-edit-add-option').val('');
                     $('#adv-edit-add-scenario').val('');
                 } else {
+                    console.log(currentEvent);
                     fb.child('events/' + currentEvent + '/options').push({
                         'ownerid': fb.getAuth().uid,
                         'option': option,
